@@ -1,27 +1,63 @@
 #include <iostream>
+#include <queue>
+#include <stack>
 #include "Diretorio.h"
 
 using namespace std;
 
-void mostra_fila(queue<string> & q) {
-    while (! q.empty()) {
-        string e = q.front();
+//Função para adicionar a fila de subdiretórios à pilha de subdiretórios.
+void queueToStack(stack<string>& x, Diretorio& dir, string& aux) {
+    queue<string> q = dir.lista_subdiretorios(aux);
+    while (!q.empty()) {
+         x.push(aux+"/"+q.front());
         q.pop();
-        if (q.empty()) cout << e;
-        else cout << e << ", ";
     }
 }
 
-int main() {
+//Função para verificar se o arquivo desejado está da fila.
+bool checkFile(queue<string>& q, string& file) {
+    while (!q.empty()){
+        if (q.front()==file){
+            return true;
+        }
+        q.pop();
+    }
+    return false;
+}
+
+
+int main(int argc, char *argv[]) {
     Diretorio dir;
+    stack<string> paths;
 
-    queue<string> q1 = dir.lista_subdiretorios("/home/aluno");
-    queue<string> q2 = dir.lista_arquivos("/home/aluno");
+    if (argc != 3){
+        cout << "Numeros de argumentos incorreto..." << endl;
+        return 3;
+    }
 
-    cout << "Subdiretórios: ";
-    mostra_fila(q1);
+    std::string path(argv[1]);
+    std::string file(argv[2]);
 
-    cout << endl;
-    cout << "Arquivos: ";
-    mostra_fila(q2);
+
+    paths.push(path);
+
+
+    while (!paths.empty()) {
+        path = paths.top();
+        paths.pop();
+
+        cout << "Procurando em: " + path << endl;
+
+        //Cria uma lista de arquivos do 1º item da pilha e verifica com a função checkFile..
+        queue<string> files = dir.lista_arquivos(path);
+        if (checkFile(files,file)){
+            cout << "Caminho do arquivo: " + path + "/" + file << endl;
+            return 1;
+        } else {
+            //Lista os subdiretórios e adiciona a pilha...
+            queueToStack(paths,dir, path);
+        }
+    }
+    cout << "Arquivo não encontrado" << endl;
+    return 0;
 }
