@@ -3,7 +3,7 @@ O programa deve ser executado em sitemas operacionais Linux.
 
 Deve-se passar 2 argumentos para o programa, o primeiro deve ser o diretório que será feito a procura e o segundo argumento é o arquivo que deseja localizar.
 
-Ex:  './main /home teste.txt'
+Ex:  `./main /home teste.txt`
 
 # Sobre o código
 O programa recebe dois argumentos o primeiro é a raiz onde começa a procura do arquivo e o segundo é o nome do arquivo a ser encontrado. É utilizado um sistema de pilha para varrer os diretórios, a cada diretório é criado uma fila com todos os arquivos deste diretório e é verificado se algum deles é o arquivo desejado. Ao final o programa mostra se, e onde o arquivo foi encontrado.
